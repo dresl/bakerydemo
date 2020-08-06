@@ -178,22 +178,23 @@ class BlogIndexPage(RoutablePageMixin, Page):
     # related BlogPages for a given Tag or redirect back to the BlogIndexPage.
     # More information on RoutablePages is at
     # http://docs.wagtail.io/en/latest/reference/contrib/routablepage.html
-    @route(r'^tags/$', name='tag_archive')
-    @route(r'^tags/([\w-]+)/$', name='tag_archive')
+    @route(r'^$', name='tag_archive')
     def tag_archive(self, request, tag=None):
-
+        tags = request.GET.getlist('tag', None)
+        print(tags)
         try:
-            tag = Tag.objects.get(slug=tag)
+            tags = Tag.objects.filter(slug__in=tags)
         except Tag.DoesNotExist:
-            if tag:
-                msg = 'There are no blog posts tagged with "{}"'.format(tag)
+            if tags:
+                msg = 'There are no blog posts tagged with "{}"'.format(tags)
                 messages.add_message(request, messages.INFO, msg)
             return redirect(self.url)
 
-        posts = self.get_posts(tag=tag)
+        posts = self.get_posts(tags=tags)
         context = {
-            'tag': tag,
-            'posts': posts
+            'tags': tags,
+            'posts': posts,
+            'page': self
         }
         return render(request, 'blog/blog_index_page.html', context)
 
@@ -203,10 +204,10 @@ class BlogIndexPage(RoutablePageMixin, Page):
 
     # Returns the child BlogPage objects for this BlogPageIndex.
     # If a tag is used then it will filter the posts by tag.
-    def get_posts(self, tag=None):
-        posts = BlogPage.objects.live().descendant_of(self)
-        if tag:
-            posts = posts.filter(tags=tag)
+    def get_posts(self, tags=None):
+        posts = BlogPage.objects.live().distinct().descendant_of(self)
+        if tags:
+            posts = posts.filter(tags__in=tags)
         return posts
 
     # Returns the list of Tags for all child posts of this BlogPage.

@@ -5,10 +5,14 @@
     {% include "base/include/header-index.html" %}
 
     <div class="container">
-        {% if tag %}
+        {% if tags %}
             <div class="row">
                 <div class="col-md-12">
-                    <p>Viewing all blog posts by <span class="outline">{{ tag }}</span></p>
+                    <p>Viewing all blog posts by:
+                        {% for tag in tags %}
+                            <span class="outline">{{ tag }}</span>
+                        {% endfor %}
+                    </p>
                 </div>
             </div>
         {% endif %}
@@ -16,7 +20,7 @@
         {% if page.get_child_tags %}
             <ul class="blog-tags tags list-inline">
                 {% for tag in page.get_child_tags %}
-                    <li><a href="{{ tag.url }}">{{ tag }}</a></li>
+                    <li><a href="?tag={{ tag }}">{{ tag }}</a></li>
                 {% endfor %}
             </ul>
         {% endif %}
