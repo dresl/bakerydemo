@@ -4,6 +4,7 @@ from django.db import models
 
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
+from wagtailvideos.edit_handlers import VideoChooserPanel
 
 from wagtail.admin.edit_handlers import (
     FieldPanel,
@@ -109,6 +110,10 @@ class StandardPage(Page):
     it could be used for any type of page content that only needs a title,
     image, introduction and body field
     """
+    header_video = models.ForeignKey('wagtailvideos.Video',
+                                     related_name='videos',
+                                     null=True,
+                                     on_delete=models.SET_NULL)
 
     introduction = models.TextField(
         help_text='Text to describe the page',
@@ -121,10 +126,12 @@ class StandardPage(Page):
         related_name='+',
         help_text='Landscape mode only; horizontal width between 1000px and 3000px.'
     )
+
     body = StreamField(
         BaseStreamBlock(), verbose_name="Page body", blank=True
     )
     content_panels = Page.content_panels + [
+        VideoChooserPanel('header_video'),
         FieldPanel('introduction', classname="full"),
         StreamFieldPanel('body'),
         ImageChooserPanel('image'),
