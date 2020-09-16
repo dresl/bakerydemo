@@ -131,6 +131,11 @@ class StandardPage(Page):
     body = StreamField(
         BaseStreamBlock(), verbose_name="Page body", blank=True
     )
+
+    search_fields = Page.search_fields + [
+        index.SearchField('body'),
+    ]
+
     content_panels = Page.content_panels + [
         VideoChooserPanel('header_video'),
         FieldPanel('introduction', classname="full"),
