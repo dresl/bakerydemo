@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load wagtailimages_tags wagtailvideos_tags %}
+{% load wagtailcore_tags wagtailimages_tags wagtailvideos_tags %}
 
 {% block content %}
     {% include "base/include/header.html" %}
@@ -12,6 +12,9 @@
             {% endif %}
             <div class="col-md-7">
                 {{ page.body }}
+            </div>
+            <div class="col-md-12">
+                {{ page.body_rich|richtext }}
             </div>
         </div>
     </div>

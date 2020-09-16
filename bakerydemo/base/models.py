@@ -118,6 +118,7 @@ class StandardPage(Page):
     introduction = models.TextField(
         help_text='Text to describe the page',
         blank=True)
+    body_rich = RichTextField(null=True, blank=True)
     image = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -134,6 +135,7 @@ class StandardPage(Page):
         VideoChooserPanel('header_video'),
         FieldPanel('introduction', classname="full"),
         StreamFieldPanel('body'),
+        FieldPanel('body_rich'),
         ImageChooserPanel('image'),
     ]
 

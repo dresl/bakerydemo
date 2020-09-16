@@ -177,3 +177,9 @@ WAGTAILSEARCH_BACKENDS = {
 
 # Wagtail settings
 WAGTAIL_SITE_NAME = "bakerydemo"
+
+# WAGTAILADMIN_RICH_TEXT_EDITORS = {
+#     'default': {
+#         'WIDGET': 'wagtail.admin.rich_text.HalloRichTextArea'
+#     }
+# }
